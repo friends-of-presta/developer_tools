@@ -17,8 +17,8 @@ This module is available for PrestaShop 1.7.2+, version for PrestaShop 1.6.x is 
 
 ### Back Office
 
-![Back Office](https://imgur.com/a/GmXa2)
+![Back Office](https://i.imgur.com/Rvk6sfg.png)
 
 ### Front Office
 
-![Front Office](https://imgur.com/a/di8pz)
+![Front Office](https://i.imgur.com/cvizNCp.png)
