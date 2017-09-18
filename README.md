@@ -11,4 +11,14 @@ to figure out exactly where and what do we have to override or extend.
 
 ## PrestaShop version
 
-This module is available for PrestaShop 1.7.2+.
+This module is available for PrestaShop 1.7.2+, version for PrestaShop 1.6.x is planned.
+
+## Some captures
+
+### Back Office
+
+![Back Office](https://imgur.com/a/GmXa2)
+
+### Front Office
+
+![Front Office](https://imgur.com/a/di8pz)
