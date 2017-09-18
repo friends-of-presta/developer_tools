@@ -53,6 +53,8 @@ class Ps_Test extends Module
      */
     public function install()
     {
+        $this->registerHook('displayAdminForm');
+
         return parent::install();
     }
 
@@ -64,5 +66,13 @@ class Ps_Test extends Module
     public function uninstall()
     {
         return parent::uninstall();
+    }
+
+    /**
+     * Render HTML content before each Admin form
+     */
+    public function hookDisplayAdminForm()
+    {
+        return 'Display Admin Form Hook';
     }
 }
