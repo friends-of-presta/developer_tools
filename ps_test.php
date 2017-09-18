@@ -27,12 +27,12 @@
 if (!defined('_PS_VERSION_'))
     exit;
 
-class Tester extends Module
+class Ps_Test extends Module
 {
 
     public function __construct()
     {
-        $this->name = 'tester';
+        $this->name = 'ps_test';
         $this->version = '1.0.0';
         $this->author = 'Mickaël Andrieu';
 
