@@ -1,0 +1,11 @@
+.hook_debug {
+    z-index: 99999;
+    position: fixed;
+    display: inline-block;
+    width: auto;
+    color: #fff;
+    background-color: #1b959f;
+    border: 2px solid #fff;
+    padding: 5px;
+    margin: 0px;
+}
