@@ -53,9 +53,7 @@ class Ps_Test extends Module
      */
     public function install()
     {
-        $this->registerHook('displayAdminForm');
-
-        return parent::install();
+        return parent::install() && $this->registerHook('displayAdminForm');
     }
 
     /**
