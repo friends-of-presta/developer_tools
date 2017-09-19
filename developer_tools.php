@@ -23,7 +23,7 @@ class Developer_Tools extends Module
         $this->displayName = 'Developer tools';
         $this->description = 'Help the developer creates modules and themes.';
         $this->ps_versions_compliancy = [
-            'min' => '1.7.2.0',
+            'min' => '1.6.0.0',
             'max' => _PS_VERSION_,
         ];
 
@@ -105,7 +105,7 @@ class Developer_Tools extends Module
             return;
         }
         
-        if (defined('PS_ADMIN_DIR')) {
+        if (defined('PS_ADMIN_DIR') && Tools::version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
             dump($name, $arguments);
         }
 
