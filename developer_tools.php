@@ -104,10 +104,6 @@ class Developer_Tools extends Module
         if ($name == 'hookDisplayOverrideTemplate') {
             return;
         }
-        
-        if (defined('PS_ADMIN_DIR') && Tools::version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            dump($name, $arguments);
-        }
 
         $this->context->smarty->assign('name', $name);
         return $this->display(__FILE__ , 'views/templates/hook.tpl');
