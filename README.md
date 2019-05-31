@@ -4,14 +4,24 @@ Make developer experience for Theme and Module developers great again!
 
 ## Features
 
+### Hooks Display
 This module enables - once installed and enabled - the display of every hook available in PrestaShop.
 
 It works both on Back and Front office. As you can assume this is really useful for every Theme and Module developer,
 to figure out exactly where and what do we have to override or extend.
 
+### Grid dev tools
+This feature can be disabled in the Performance page of the Back Office (in Advanced Parameters).
+
+### Employee impersonation
+
+This module also enable complete developer tools for the modern grids, see captures.
+
+> This feature is only available in the Back Office.
+
 ## PrestaShop version
 
-This module is available for PrestaShop 1.7.2+, version for PrestaShop 1.6.x is planned.
+This module is available for PrestaShop 1.7.5+.
 
 ## Some captures
 
@@ -19,6 +29,21 @@ This module is available for PrestaShop 1.7.2+, version for PrestaShop 1.6.x is 
 
 ![Back Office](https://i.imgur.com/Rvk6sfg.png)
 
+![Grid dev toolbar](https://user-images.githubusercontent.com/1247388/58739700-07645280-840c-11e9-9b38-4b6082e44c0e.png)
+
+![Grid Columns collector](https://user-images.githubusercontent.com/1247388/58739701-07645280-840c-11e9-823e-28ecb3bd7e8e.png)
+
+![Grid Hooks Templating](https://user-images.githubusercontent.com/1247388/58739703-07fce900-840c-11e9-8ba0-9215bf241a7e.png)
+
+![User selector](https://user-images.githubusercontent.com/1247388/58739704-07fce900-840c-11e9-8787-a5844c2a4652.png)
+
+
 ### Front Office
 
 ![Front Office](https://i.imgur.com/cvizNCp.png)
+
+## Installation
+
+```
+composer require "friends-of-prestashop/developer_tools" && php bin/console pr:mo install developer_tools
+```

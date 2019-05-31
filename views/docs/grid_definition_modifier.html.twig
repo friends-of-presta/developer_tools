@@ -1,0 +1,27 @@
+<?php
+/**
+ * Hooks allows to modify the {{ name|capitalize }} Grid definition.
+ *
+ * This hook is a right place to add/remove columns, filters or actions (bulk, grid).
+ *
+ * @param array $params
+ */
+ public function hookAction{{ id|capitalize }}GridDefinitionModifier(array $params)
+ {
+     /** @var PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinition $definition */
+     $definition = $params['definition'];
+
+     /** @var PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection */
+     $columns = $definition->getColumns();
+
+     /** @var PrestaShop\PrestaShop\Core\Grid\Filter\FilterCollection $filters */
+     $filters = $definition->getFilters();
+
+     /** @var PrestaShop\PrestaShop\Core\Grid\Action\GridActionCollection $actions */
+     $actions = $definition->getActions();
+
+     /** @var PrestaShop\PrestaShop\Core\Grid\Action\Bulk\BulkActionCollection $bulkActions */
+     $bulkActions = $definition->getBulkActions();
+
+     dump($definition);
+ }

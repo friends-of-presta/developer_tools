@@ -1,0 +1,20 @@
+<?php
+/**
+ * Hooks allows to modify the {{ name|capitalize }} Grid query builders.
+ *
+ * This hook should be used when you want to alter the Grid data.
+ *
+ * @doc https://www.doctrine-project.org/projects/doctrine-dbal/en/2.9/reference/query-builder.html
+ *
+ * @param array $params
+ */
+ public function hookAction{{ id|capitalize }}GridQueryBuilderModifier(array $params)
+ {
+     /** @var Doctrine\DBAL\Query\QueryBuilder $searchQueryBuilder */
+     $searchQueryBuilder = $params['search_query_builder'];
+
+     /** @var Doctrine\DBAL\Query\QueryBuilder $countQueryBuilder */
+     $countQueryBuilder = $params['count_query_builder'];
+
+     dump($searchQueryBuilder, $countQueryBuilder);
+ }

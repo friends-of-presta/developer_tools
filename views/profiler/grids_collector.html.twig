@@ -1,0 +1,161 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% import _self as helper %}
+
+{% block toolbar %}
+  {% set icon %}
+    {{ include('@Modules/developer_tools/public/svg/grid.svg') }}
+    <span class="sf-toolbar-value">Grids ({{ collector.grids|length }})</span>
+  {% endset %}
+
+  {% set text %}
+    <div class="sf-toolbar-info-piece">
+      <div class="sf-toolbar-info-piece">
+        <b class="sf-toolbar-ajax-info">Grids ({{ collector.grids|length }})</b>
+      </div>
+      <div class="sf-toolbar-info-piece">
+        <table class="sf-toolbar-ajax-requests">
+          <thead>
+          <tr>
+            <th>Grid id</th>
+            <th>Grid name</th>
+          </tr>
+          </thead>
+          <tbody class="sf-toolbar-ajax-request-list">
+          {% for id, grid in collector.grids %}
+            <tr>
+              <td><i>{{ id }}</i></td>
+              <td>{{ grid.name }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="2">No Grid rendered.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endset %}
+
+  {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+
+{% endblock %}
+
+{% block menu %}
+  <span class="label">
+    <span class="icon">{{ include('@Modules/developer_tools/public/svg/grid.svg') }}</span>
+    <strong>Grids</strong>
+  </span>
+{% endblock %}
+
+{% block panel %}
+      <h2>Grids</h2>
+        <div class="sf-tabs">
+          {% for id, grid in collector.grids %}
+            {%
+              set gridName, gridId = grid.name|title, id|camelize
+            %}
+            <div class="tab">
+              <span class="tab-title">{{ gridName }}</span>
+              <h3>{{ gridName }}</h3>
+              <div class="tab-content">
+                <h4>Columns</h4>
+                <table class="ps-grid">
+                  <thead>
+                  <tr>
+                    <th>Name (id)</th>
+                    <th>Type</th>
+                    <th>Options</th>
+                  </tr>
+                  </thead>
+                  {% for column in grid.columns %}
+                    <tr>
+                      <td>
+                        {{ column.name ?? 'N/A' }}({{ column.id }})
+                      </td>
+                      <td>
+                        <span title="{{ column.column_path }}" style="cursor: pointer;">{{ column.type|camelize }}</span>
+                      </td>
+                      <td>
+                        {{ profiler_dump(column.options) }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </table>
+
+                <h4>Data ({{ grid.data.records_total }} Items)</h4>
+                <table class="ps-grid-data">
+                  <thead>
+                  <tr>
+                    <th>Retrieved Data</th>
+                    <th>Doctrine Query</th>
+                  </tr>
+                  </thead>
+                  <tr>
+                    <td width="50%">{{ profiler_dump(grid.data.records) }}</td>
+                    <td>{{ grid.data.query }}</td>
+                  </tr>
+                </table>
+
+                <h4>Hooks</h4>
+                <table class="ps-grid-data">
+                  <thead>
+                  <tr>
+                    <th>Hook name</th>
+                    <th>Template</th>
+                  </tr>
+                  </thead>
+                  <tr>
+                    <td><b>action{{ gridId }}GridDefinitionModifier</b></td>
+                    <td>
+                      {{ include('@Modules/developer_tools/views/docs/grid_definition_modifier.html.twig', {
+                        'id': gridId,
+                        'name': gridName
+                      })|highlight|raw }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>action{{ gridId }}GridDataModifier</b></td>
+                    <td>
+                      {{ include('@Modules/developer_tools/views/docs/grid_data_modifier.html.twig', {
+                        'id': gridId,
+                        'name': gridName
+                      })|highlight|raw }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>action{{ gridId }}GridFilterFormModifier</b></td>
+                    <td>
+                      {{ include('@Modules/developer_tools/views/docs/grid_filter_form_modifier.html.twig', {
+                        'id': gridId,
+                        'name': gridName
+                      })|highlight|raw }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>action{{ gridId }}GridQueryBuilderModifier</b></td>
+                    <td>
+                      {{ include('@Modules/developer_tools/views/docs/grid_query_builder_modifier.html.twig', {
+                        'id': gridId,
+                        'name': gridName
+                      })|highlight|raw }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>action{{ gridId }}GridPresenterModifier</b></td>
+                    <td>
+                      {{ include('@Modules/developer_tools/views/docs/grid_presenter_modifier.html.twig', {
+                        'id': gridId,
+                        'name': gridName
+                      })|highlight|raw }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          {% else %}<
+            <div class="empty">
+              <p>No Grids have been rendered.</p>
+            </div>
+          {% endfor %}
+        </div>
+{% endblock %}
