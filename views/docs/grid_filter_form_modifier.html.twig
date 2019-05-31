@@ -1,0 +1,15 @@
+<?php
+/**
+ * Hooks allows to modify the {{ name|capitalize }} Grid filter form.
+ *
+ * This hook is a right place to add some specific events to the form and/or add new validation rules.
+ *
+ * @param array $params
+ */
+ public function hookAction{{ id|capitalize }}GridFormFilterModifier(array $params)
+ {
+     /** @var Symfony\Component\Form\FormBuilderInterface $formBuilder */
+     $formBuilder = $params['filter_form_builder'];
+
+     dump($formBuilder);
+ }

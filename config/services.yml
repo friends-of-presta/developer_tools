@@ -1,0 +1,39 @@
+services:
+    fop.grid.reporter:
+      class: FOP\DeveloperTools\Grid\Reporter
+
+    fop.grid.grid_data_collector:
+      class: FOP\DeveloperTools\Grid\GridDataCollector
+      arguments: ['@fop.grid.reporter']
+      tags:
+        - name:     data_collector
+          template: '@Modules/developer_tools/views/profiler/grids_collector.html.twig'
+          id:       'fop.grids_collector'
+
+    fop.employee.repository:
+      class: FOP\DeveloperTools\Employee\Repository
+      arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
+
+    fop.employee.logged_employee_data_collector:
+      class: FOP\DeveloperTools\Employee\LoggedEmployeeDataCollector
+      arguments: ['@fop.employee.repository']
+      tags:
+        - name:     data_collector
+          template: '@Modules/developer_tools/views/profiler/logged_employee_collector.html.twig'
+          id:       'fop.logged_employee_collector'
+
+    fop.original_grid_presenter:
+      class: 'PrestaShop\PrestaShop\Core\Grid\Presenter\GridPresenter'
+      arguments:
+        - '@prestashop.core.hook.dispatcher'
+
+    prestashop.core.grid.presenter.grid_presenter:
+      class: FOP\DeveloperTools\Grid\DecoratedPresenter
+      arguments:
+        - '@fop.original_grid_presenter'
+        - '@fop.grid.reporter'
+
+    fop.highlight.twig_extension:
+      class: FOP\DeveloperTools\Twig\CodeHighlightExtension
+      tags:
+        - { name: twig.extension }

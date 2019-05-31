@@ -2,28 +2,37 @@
 /**
  * @author Mickaël Andrieu <andrieu.travail@gmail.com>
  *
- * This module register every available hook in PrestaShop application
- * and display a useful block to show where the hook is rendered.
+ * This module provides tools for PrestaShop developers
  */
+
+use PrestaShopBundle\Form\Admin\Type\SwitchType;
+
+require_once 'vendor/autoload.php';
+
 class Developer_Tools extends Module
 {
+    const HOOKS_DISPLAY = 'DEV_TOOLS_HOOKS_DISPLAY';
+
     /**
      * @var array the full list of registered hooks.
      */
     private $hooks;
 
+    /**
+     * In constructor we define our module's meta data.
+     * It's better tot keep constructor (and main module class itself) as thin as possible
+     * and do any processing in controller.
+     */
     public function __construct()
     {
         $this->name = 'developer_tools';
-        $this->version = '1.0.0';
+        $this->version = '2.0.0';
         $this->author = 'Mickaël Andrieu';
-
-        parent::__construct();
 
         $this->displayName = 'Developer tools';
         $this->description = 'Help the developer creates modules and themes.';
         $this->ps_versions_compliancy = [
-            'min' => '1.6.0.0',
+            'min' => '1.7.5.0',
             'max' => _PS_VERSION_,
         ];
 
@@ -31,81 +40,136 @@ class Developer_Tools extends Module
         $sql->select('name')->from('hook', 'h');
 
         $this->hooks = Db::getInstance()->executeS($sql);
+
+        parent::__construct();
     }
 
     /**
-     * Module installation.
-     *
-     * @return bool Success of the installation
+     * {@inheritdoc}
      */
     public function install()
     {
-        return parent::install() && $this->registerHooks($this->hooks);
+        Configuration::updateValue(self::HOOKS_DISPLAY, true);
+
+        $this->registerHooks([
+            'actionPerformancePageForm',
+            'ActionPerformancePageSave',
+        ]);
+
+        $this->registerHooks($this->hooks);
+
+        return parent::install();
     }
 
     /**
-     * Uninstall the module.
-     *
-     * @return bool Success of the uninstallation
+     * {@inheritdoc}
      */
     public function uninstall()
     {
-        return parent::uninstall() && $this->unregisterHooks($this->hooks);
+        Configuration::deleteByName(self::HOOKS_DISPLAY);
+
+        return parent::uninstall();
     }
 
     /**
      * Helper function to register a list of hooks.
      *
      * @param array $hooks
-     * @param null $shopList
      */
-    private function registerHooks(array $hooks, $shopList = null)
+    private function registerHooks(array $hooks)
     {
         foreach($hooks as $hook) {
-            $this->registerHook($hook, $shopList);
+            $this->registerHook($hook);
         }
     }
 
     /**
-     * Helper function to unregister a list of hooks.
+     * Add the required styles and javascript for the Hook Display.
      *
-     * @param array $hooks
-     * @param null $shopList
+     * @param $arguments
+     * @return string
      */
-    private function unregisterHooks(array $hooks, $shopList = null)
-    {
-        foreach($hooks as $hook) {
-            $this->unregisterHook($hook, $shopList);
-        }
-    }
-
     public function hookDisplayHeader($arguments)
     {
-        $this->context->controller->registerStylesheet(
-            'developer-tools-style',
-            'modules/'.$this->name.'/public/css/hook.css',
-            [
-                'media' => 'all',
-                'priority' => 1000,
-            ]
-        );
+        if ($this->isHooksDisplayEnabled()) {
+            $this->context->controller->registerStylesheet(
+                'developer-tools-style',
+                'modules/'.$this->name.'/public/css/hook.css',
+                [
+                    'media' => 'all',
+                    'priority' => 1000,
+                ]
+            );
+            $this->context->controller->registerJavascript(
+                'developer-tools-javascript',
+                'modules/'.$this->name.'/public/js/hook.js',
+                [
+                    'position' => 'bottom',
+                    'priority' => 1000,
+                ]
+            );
+        }
 
         return $this->__call('actionFrontControllerSetMedia', $arguments);
     }
 
+    /**
+     * Enables the displaying of every hook of display.
+     *
+     * @param array $arguments
+     * @return string
+     */
     public function hookActionAdminControllerSetMedia($arguments)
     {
         $this->context->controller->addCSS($this->_path.'public/css/hook.css');
+        $this->context->controller->addJS($this->_path.'public/js/hook.js');
 
         return $this->__call('actionAdminControllerSetMedia', $arguments);
     }
 
-    public function __call($name, $arguments) {
-        if ($name == 'hookDisplayOverrideTemplate') {
-            return;
+    /**
+     *
+     */
+    public function hookActionPerformancePageForm(&$hookParams)
+    {
+        $formBuilder = $hookParams['form_builder'];
+        $uploadQuotaForm = $formBuilder->get('optional_features');
+        $uploadQuotaForm->add(
+            'hooks_display',
+            SwitchType::class,
+            [
+                'label' => 'Display available hooks?',
+                'data' => $this->isHooksDisplayEnabled(),
+            ]
+        );
+    }
+
+    public function hookActionPerformancePageSave($hookParams)
+    {
+        $hooksDisplayFeatureEnabled = $hookParams['form_data']['optional_features']['hooks_display'];
+
+        Configuration::updateValue(self::HOOKS_DISPLAY, $hooksDisplayFeatureEnabled);
+    }
+
+    /**
+     * @param string $hookName
+     * @param array $hookArguments
+     * @return string
+     */
+    public function __call($hookName, $hookArguments) {
+        if ($hookName === 'hookDisplayOverrideTemplate') {
+            return '';
         }
 
-        $this->context->smarty->assign('name', $name);
-        return $this->display(__FILE__ , 'views/templates/hook.tpl');
+        if ($this->isHooksDisplayEnabled()) {
+            $this->context->smarty->assign('name', $hookName);
+
+            return $this->display(__FILE__ , 'views/hook.tpl');
+        }
+    }
+
+    private function isHooksDisplayEnabled()
+    {
+        return (bool) Configuration::get(self::HOOKS_DISPLAY);
     }
 }

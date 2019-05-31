@@ -11,7 +11,7 @@ to figure out exactly where and what do we have to override or extend.
 
 ## PrestaShop version
 
-This module is available for PrestaShop 1.7.2+, version for PrestaShop 1.6.x is planned.
+This module is available for PrestaShop 1.7.5+.
 
 ## Some captures
 

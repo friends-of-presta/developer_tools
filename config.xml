@@ -2,7 +2,7 @@
 <module>
     <name>developer_tools</name>
     <displayName><![CDATA[Developer tools]]></displayName>
-    <version><![CDATA[1.0.0]]></version>
+    <version><![CDATA[2.0.0]]></version>
     <description><![CDATA[Help the developer creates modules and themes.]]></description>
     <author><![CDATA[Mickaël Andrieu]]></author>
     <tab><![CDATA[]]></tab>

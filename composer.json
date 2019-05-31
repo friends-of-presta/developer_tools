@@ -1,0 +1,11 @@
+{
+    "name": "friends-of-prestashop/developer_tools",
+    "description": "Enable PrestaShop Developer tools",
+    "autoload": {
+        "psr-4": {
+            "FOP\\DeveloperTools\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "type": "prestashop-module"
+}

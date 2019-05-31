@@ -1,0 +1,16 @@
+<?php
+/**
+ * Hooks allows to modify the {{ name|capitalize }} Grid data.
+ *
+ * This hook is a right place to update data using really complex business rules.
+ * If performances matters, use the hookAction{{ id|capitalize }}GridQueryBuilderModifier instead.
+ *
+ * @param array $params
+ */
+ public function hookAction{{ id|capitalize }}GridDataModifier(array $params)
+ {
+     /** @var PrestaShop\PrestaShop\Core\Grid\Data\GridData $gridData */
+     $gridData = $params['data'];
+
+     dump($gridData);
+ }

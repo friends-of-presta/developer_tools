@@ -1,0 +1,15 @@
+<?php
+/**
+ * Hooks allows to modify the {{ name|capitalize }} Grid presenter.
+ *
+ * This hook is a right place to do some formatting operations (like currencies and dates).
+ *
+ * @param array $params
+ */
+ public function hookAction{{ id|capitalize }}GridPresenterModifier(array $params)
+ {
+     /** @var array $presentedGrid */
+     $presentedGrid = $params['presented_grid'];
+
+     dump($presentedGrid);
+ }
