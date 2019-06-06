@@ -45,5 +45,7 @@ This module is available for PrestaShop 1.7.5+.
 ## Installation
 
 ```
-composer require "friends-of-prestashop/developer_tools" && php bin/console pr:mo install developer_tools
+composer require "friends-of-prestashop/developer_tools" && 
+composer install &&
+php bin/console pr:mo install developer_tools
 ```
