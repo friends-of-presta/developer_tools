@@ -51,14 +51,15 @@ class Developer_Tools extends Module
     {
         Configuration::updateValue(self::HOOKS_DISPLAY, true);
 
-        $this->registerHooks([
-            'actionPerformancePageForm',
-            'ActionPerformancePageSave',
-        ]);
+        $installStatus = parent::install() &&
+            $this->registerHook('actionPerformancePageForm') &&
+            $this->registerHook('actionPerformancePageSave')
+        ;
 
         $this->registerHooks($this->hooks);
 
-        return parent::install();
+        return $installStatus;
+
     }
 
     /**
