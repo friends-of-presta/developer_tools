@@ -149,7 +149,7 @@ class Developer_Tools extends Module
     {
         $hooksDisplayFeatureEnabled = $hookParams['form_data']['optional_features']['hooks_display'];
 
-        Configuration::updateValue(self::HOOKS_DISPLAY, $hooksDisplayFeatureEnabled);
+        Configuration::updateValue(self::HOOKS_DISPLAY, (bool) $hooksDisplayFeatureEnabled);
     }
 
     /**
