@@ -12,6 +12,7 @@ require_once 'vendor/autoload.php';
 class Developer_Tools extends Module
 {
     const HOOKS_DISPLAY = 'DEV_TOOLS_HOOKS_DISPLAY';
+    const PROFILER = 'DEV_TOOLS_PROFILER';
 
     /**
      * @var array the full list of registered hooks.
@@ -49,7 +50,8 @@ class Developer_Tools extends Module
      */
     public function install()
     {
-        Configuration::updateValue(self::HOOKS_DISPLAY, true);
+        Configuration::updateValue(self::HOOKS_DISPLAY, false);
+        Configuration::updateValue(self::PROFILER, false);
 
         $installStatus = parent::install() &&
             $this->registerHook('actionPerformancePageForm') &&
@@ -68,6 +70,7 @@ class Developer_Tools extends Module
     public function uninstall()
     {
         Configuration::deleteByName(self::HOOKS_DISPLAY);
+        Configuration::deleteByName(self::PROFILER);
 
         return parent::uninstall();
     }
@@ -129,13 +132,13 @@ class Developer_Tools extends Module
     }
 
     /**
-     *
+     * Display the new options under Performances Page
      */
     public function hookActionPerformancePageForm(&$hookParams)
     {
         $formBuilder = $hookParams['form_builder'];
-        $uploadQuotaForm = $formBuilder->get('optional_features');
-        $uploadQuotaForm->add(
+        $optionalFeatures = $formBuilder->get('optional_features');
+        $optionalFeatures->add(
             'hooks_display',
             SwitchType::class,
             [
@@ -143,13 +146,24 @@ class Developer_Tools extends Module
                 'data' => $this->isHooksDisplayEnabled(),
             ]
         );
+
+        $optionalFeatures->add(
+            'profiler',
+            SwitchType::class,
+            [
+                'label' => 'Display the Front Profiler',
+                'data' => $this->isProfilerEnabled(),
+            ]
+        );
     }
 
     public function hookActionPerformancePageSave($hookParams)
     {
         $hooksDisplayFeatureEnabled = $hookParams['form_data']['optional_features']['hooks_display'];
+        $profilerFeatureEnabled = $hookParams['form_data']['optional_features']['profiler'];
 
         Configuration::updateValue(self::HOOKS_DISPLAY, (bool) $hooksDisplayFeatureEnabled);
+        Configuration::updateValue(self::PROFILER, (bool) $profilerFeatureEnabled);
     }
 
     /**
@@ -158,7 +172,7 @@ class Developer_Tools extends Module
      * @return string
      */
     public function __call($hookName, $hookArguments) {
-        if ($hookName === 'hookDisplayOverrideTemplate') {
+        if ($hookName === 'hookDisplayOverrideTemplate' || strpos($hookName, 'filter') !== false) {
             return '';
         }
 
@@ -172,5 +186,10 @@ class Developer_Tools extends Module
     private function isHooksDisplayEnabled()
     {
         return (bool) Configuration::get(self::HOOKS_DISPLAY);
+    }
+
+    private function isProfilerEnabled()
+    {
+        return (bool) Configuration::get(self::PROFILER);
     }
 }
