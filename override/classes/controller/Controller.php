@@ -190,6 +190,18 @@ abstract class Controller extends ControllerCore
 
     public function run()
     {
+        /**
+         * Should be enabled only for the Front Office.
+         * For legacy pages of the Back Office we meet some conflicts with Symfony
+	 * Ask the PrestaShop Core Team to hurry on their migration roadmap !
+         */
+        if (
+            !Configuration::get('DEV_TOOLS_PROFILER')
+            || defined('_PS_ADMIN_DIR_')
+        ) {
+            return parent::run();
+        }
+
         $this->init();
         $this->profiler[] = $this->stamp('init');
         if ($this->checkAccess()) {
@@ -222,11 +234,8 @@ abstract class Controller extends ControllerCore
         } else {
             $this->initCursedPage();
         }
-        if (Configuration::get('DEV_TOOLS_PROFILER') && !defined('_PS_ADMIN_DIR_')) {
-            $this->displayProfiling();
-        } else {
-            $this->display();
-        }
+
+        $this->displayProfiling();
     }
 
     private function getVarSize($var)
