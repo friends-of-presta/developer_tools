@@ -48,8 +48,9 @@ Also, the Legacy Profiler is working as expected (ie like in PrestaShop 1.6) onc
 
 ## Installation
 
+Open a CLI at the root of your shop and type the following instructions (Composer software needs to be installed).
+Also, the file `composer.json` needs to be present at the root of the shop: don't hesitate to complain [here](https://github.com/PrestaShop/PrestaShop/issues/20333) if it doesn't.
+
 ```
-composer require "friends-of-prestashop/developer_tools" && 
-composer install &&
-php bin/console pr:mo install developer_tools
+composer require "friends-of-prestashop/developer_tools" && php bin/console pr:mo install developer_tools
 ```
