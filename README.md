@@ -42,6 +42,10 @@ This module is available for PrestaShop 1.7.5+.
 
 ![Front Office](https://i.imgur.com/cvizNCp.png)
 
+Also, the Legacy Profiler is working as expected (ie like in PrestaShop 1.6) once enabled:
+
+![Welcome Back, Legacy Profiler](https://user-images.githubusercontent.com/1247388/81765157-60b97a80-94d3-11ea-9236-6730ae18d5c9.PNG)
+
 ## Installation
 
 ```
