@@ -1,0 +1,46 @@
+name: "ps_release"
+
+on:
+  push:
+    tags:
+      - "*"
+
+env:
+  MODULE_NAME: developer_tools
+
+jobs:
+  ps_release:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@master"
+        with:
+          lfs: true
+
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+
+      - name: create folder
+        run: mkdir newdir
+
+      - name: move Files
+        run: ls | grep -v newdir | xargs -I{} mv {} newdir
+
+      - name: rename folder
+        run: mv newdir ${{env.MODULE_NAME}}
+
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: ${{env.MODULE_NAME}}_${{env.RELEASE_VERSION}}.zip
+          exclusions: '*.git* README.md config_de.xml config.xml'
+          type: 'zip'
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            ${{env.MODULE_NAME}}_${{env.RELEASE_VERSION}}.zip
+        id: "automatic_releases"
