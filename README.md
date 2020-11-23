@@ -5,7 +5,7 @@ Make developer experience for Theme and Module developers great again!
 ## Features
 
 ### Hooks Display
-This module enables - once installed and enabled - the display of every hook available in PrestaShop.
+This module enables the display of every hook available in PrestaShop. Activate hook display in performance page.
 
 It works both on Back and Front office. As you can assume this is really useful for every Theme and Module developer,
 to figure out exactly where and what do we have to override or extend.
@@ -42,15 +42,18 @@ This module is available for PrestaShop 1.7.5+.
 
 ![Front Office](https://i.imgur.com/cvizNCp.png)
 
-Also, the Legacy Profiler is working as expected (ie like in PrestaShop 1.6) once enabled:
+Also, the Legacy Profiler is working as expected (ie like in PrestaShop 1.6) once enabled in performance page :
 
 ![Welcome Back, Legacy Profiler](https://user-images.githubusercontent.com/1247388/81765157-60b97a80-94d3-11ea-9236-6730ae18d5c9.PNG)
 
 ## Installation
 
 Open a CLI at the root of your shop and type the following instructions (Composer software needs to be installed).
-Also, the file `composer.json` needs to be present at the root of the shop: don't hesitate to complain [here](https://github.com/PrestaShop/PrestaShop/issues/20333) if it doesn't.
+
 
 ```
-composer require "friends-of-prestashop/developer_tools" && php bin/console pr:mo install developer_tools
+cd modules/developer_tools
+composer install
+cd ../..
+php bin/console pr:mo install developer_tools
 ```
