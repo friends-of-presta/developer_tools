@@ -5,8 +5,7 @@ on:
     tags:
       - "*"
 env:
-#  ORGANISATION_NAME: friends-of-presta
-  ORGANISATION_NAME: SebSept
+  ORGANISATION_NAME: friends-of-presta
 
 jobs:
   ps_release:
