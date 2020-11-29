@@ -1,0 +1,51 @@
+name: "ps_release"
+
+on:
+  push:
+    tags:
+      - "*"
+env:
+  ORGANISATION_NAME: friends-of-presta
+
+jobs:
+  ps_release:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Setup zipname. Exports $MODULE_NAME, $VERSION & $ZIP_FILE"
+        run: |
+          echo repo : ${GITHUB_REPOSITORY}
+          echo orga : ${ORGANISATION_NAME}
+          MODULE_NAME=${GITHUB_REPOSITORY#$ORGANISATION_NAME/}
+          echo "MODULE_NAME=${MODULE_NAME}" >> $GITHUB_ENV
+          REF='${{ github.ref }}'
+          VERSION=${REF#refs/*/}
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "ZIP_FILE=${MODULE_NAME}_${VERSION}.zip" >> $GITHUB_ENV
+
+      - name: "Checkout source code"
+        uses: "actions/checkout@master"
+        with:
+          lfs: true
+
+      - name: "Prepare files"
+        run: |
+            mkdir newdir
+            ls | grep -v newdir | xargs -I{} mv {} newdir
+            mv newdir ${{ env.MODULE_NAME }}
+
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: '${{ env.ZIP_FILE }}'
+          exclusions: '*.git* README.md config_de.xml config.xml'
+          type: 'zip'
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+#          automatic_release_tag: "latest"
+          files: |
+            ${{ env.ZIP_FILE }}
+        id: "automatic_releases"
