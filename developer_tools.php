@@ -27,7 +27,7 @@ class Developer_Tools extends Module
     public function __construct()
     {
         $this->name = 'developer_tools';
-        $this->version = '2.0.0';
+        $this->version = '2.0.1';
         $this->author = 'Mickaël Andrieu';
 
         $this->displayName = 'Developer tools';
