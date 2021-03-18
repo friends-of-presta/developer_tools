@@ -52,8 +52,7 @@ Open a CLI at the root of your shop and type the following instructions (Compose
 
 
 ```
-cd modules/developer_tools
-composer install
-cd ../..
-php bin/console pr:mo install developer_tools
+git clone git@github.com:friends-of-presta/developer_tools.git modules/developer_tools --depth 1
+composer install -d modules/developer_tools --no-dev
+php ./bin/console prestashop:module install developer_tools
 ```
